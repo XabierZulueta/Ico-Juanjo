@@ -105,6 +105,7 @@ public class Celda extends JButton implements Comparable {
         this.g = g;
         this.h = h;
         this.f=g+h;
+        setV();
         
     }
 
@@ -208,7 +209,7 @@ public class Celda extends JButton implements Comparable {
     }
     @Override
     public String toString() {
-        return "[" + this.x + "] [" + this.y + "] F=" + f + " G="+g+" H="+h;
+        return "[" + this.x + "] [" + this.y + "] ";
     }
 
 }

@@ -32,12 +32,9 @@ public class Panels extends JFrame{
 	
 	private static final long serialVersionUID = 1L;
 	private static int tamano = 5;
-	private ArrayList<Celda> abierto;
-	private ArrayList<Celda> cerrado;
 	
 	public void generar(){
-		abierto = new ArrayList<>();
-        cerrado = new ArrayList<>();
+
         Busquedas busq=new Busquedas();
 		busq.setTamano(tamano);
       //Generamos el laberinto
@@ -164,94 +161,50 @@ public class Panels extends JFrame{
 				}*/
 			 
 			 busq.buscar();
+			 generarSolucion(busq.getCeldas());
+			 
 		  }
 		});
 		
 	}
-	/*public void botonBuscar(){
+	public void generarSolucion(Celda[][] laberinto){
+		
+      //Generamos el laberinto
 		JFrame frame = new JFrame();
+		Container cp = getContentPane();
+		GridLayout gl = new GridLayout(tamano, tamano);
+		frame.setSize(new Dimension(1000, 700));
+		frame.setLocationRelativeTo(null);
+		
+		gl.setHgap(5);
+		gl.setVgap(5);
+		
+		
+		for (int i = 1; i <= tamano; i++) {
+			for (int j = 1; j <= tamano; j++) {
+				
+				Celda b = laberinto[i][j];
+				frame.add(b);
+			}
+		}		frame.setLayout(gl);
 
-        frame.setLayout(new BorderLayout());
 
-        JPanel btnPnl = new JPanel(new BorderLayout());
-        JPanel bottombtnPnl = new JPanel();
-        JButton busc = new JButton("Buscar Soluciones");
-        bottombtnPnl.add(busc);
-        
-        busc.getModel().addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                ButtonModel model = (ButtonModel) e.getSource();
-                if (model.isPressed()) {
-                	/**
-                	 * Cambiar propiedades
-                	 
-                	//cambiar label
-                    String btnText = (b.getText());
-                    
-                    if (btnText.equals("Camino")) {
-                    	b.setH(b.calcularHeuristica());
-                        b.setText("Campo");
-                        
-                    }
-                    if (btnText.equals("Campo")) {
-                        b.setText("Bosque");
-                    }
-                    if (btnText.equals("Bosque")) {
-                        b.setText("R�o");
-                    }
-                    if (btnText.equals("R�o")) {
-                        b.setText("Monta�a");
-                    }
-                    if (btnText.equals("Monta�a")) {
-                        b.setText("Camino");
-                    }
-                }
-            }
-        });
-    	
-        busc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            	//repaint();
-            }
-        });
-        
-        btnPnl.add(bottombtnPnl, BorderLayout.CENTER);
-
-        frame.add(btnPnl, BorderLayout.SOUTH);
-
-        frame.setTitle("JTable Example.");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-	}*/
-	
-	public void calcularSucesores(){
+		
 		
 	}
-	
-	
-	
+
     
 	public Panels() {
 		super("Laberinto");
-		cerrado = new ArrayList<>();
 		
 		tamanolab();
 		generar();
 				
 		
-		//Dentro del siguiente for iremos configurando cada una de las celdas
 
-		for (int t=0; t < listaCelda.size(); t++) {
-				
-				Celda actual =listaCelda.get(t);
-				actual.setVisible(true);
-				cerrado.add(actual);
-			
-		}
-		
-		//botonBuscar();
 	}
 	
 	public static void tamanolab() {
@@ -274,11 +227,6 @@ public class Panels extends JFrame{
                 main.setVisible(true);
             }
         });
-		
-		//Idastar idastar = new Idastar();
-		//idastar.setVisible(true);
-		
-		//Astar astar = new Astar();
-		//astar.setVisible(true);		
+			
 	}
 }

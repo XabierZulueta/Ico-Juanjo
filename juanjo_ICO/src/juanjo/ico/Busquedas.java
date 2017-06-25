@@ -39,12 +39,12 @@ public class Busquedas {
     	/**
     	 * Añadimos la celda inicial a abiertos.
     	 */
-    	
+		
         abiertos.add(laberinto[1][1]);
         while (!abiertos.isEmpty()) {
-
+   
             Celda celdaActual = abiertos.remove(0);
-
+            
             cerrados.add(celdaActual);
             // Marcamos la celdaActual como celda visitada.
             celdaActual.setVisitado(true);
@@ -55,12 +55,11 @@ public class Busquedas {
             	celdaActual.setG(celdaActual.getPadre().getG() + 1);	
             	celdaActual.setF(celdaActual.getG(),celdaActual.getH()); 
                 guardar(celdaActual);
-                System.out.println(cerrados);
                 return;
             } else {
-            	 
+            	
     	  		explorarCelda(celdaActual);                
-      
+    	  		
             }
         }
         /**
@@ -84,19 +83,24 @@ public class Busquedas {
 
 		
         ArrayList<Celda> sucesores = sucesores(celdaActual);
-        
+        int esta=0;
         for (Celda sucesor : sucesores) {
 
             if (cerrados.indexOf(sucesor) == -1 && abiertos.indexOf(sucesor) == -1) {
-
+            	for(int i=0; i<cerrados.size();i++)
+            	{
+            		if(cerrados.get(i).getPosX()==sucesor.getPosX() &&
+            				cerrados.get(i).getPosY()==sucesor.getPosY()	)
+            			esta=1;
+            	}
+            	if(esta!=1){
                 abiertos.add(sucesor);
-                
                 laberinto[sucesor.getPosX()][sucesor.getPosY()] = sucesor;
                 
                 // Ordenamos el array de abierto en función de F(n).
-                Collections.sort(abiertos);
+                Collections.sort(abiertos);}}
                 
-            }
+            
         }
     }
 	
@@ -126,7 +130,7 @@ public class Busquedas {
 	        }
 	        if (celdaActual.getPosY() < tamano && celdaActual.getPosX()< tamano) {
 	            if (laberinto[celdaActual.getPosX() + 1][celdaActual.getPosY()+1].getText() != "Montaña"
-	            		&& abiertos.indexOf(laberinto[celdaActual.getPosX() + 1][celdaActual.getPosY()+1])!=-1)
+	            		)
 	            {
 	            	
 	            	sucesor = hijo(celdaActual, 1, 1);
@@ -165,7 +169,6 @@ public class Busquedas {
 	            }
 	        }
 	    	
-		 System.out.println(sucesores);
 		 return sucesores;
 	 
 	 }
@@ -179,11 +182,8 @@ public class Busquedas {
 		                (float)(1/laberinto[celdaActual.getPosX() + x][celdaActual.getPosY() + y].getV() + celdaActual.getG()),
 		                laberinto[celdaActual.getPosX() + x][celdaActual.getPosY() + y].getH()
 		                );	
-	    			System.out.println(laberinto[celdaActual.getPosX() + x][celdaActual.getPosY() + y].getPosX()+" "+
-	    	    			laberinto[celdaActual.getPosX() + x][celdaActual.getPosY() + y].getPosY()+" "+laberinto[celdaActual.getPosX() + x][celdaActual.getPosY() + y].getV());
-	    	    
-	    	sucesor.setPadre(celdaActual);
 	    	
+	    	sucesor.setPadre(celdaActual);
 	    	return sucesor;
 	    }
 	
