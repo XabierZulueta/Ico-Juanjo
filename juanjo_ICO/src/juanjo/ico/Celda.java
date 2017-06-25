@@ -9,7 +9,7 @@ import javax.swing.JButton;
 
 
 
-public class Celda extends JButton {
+public class Celda extends JButton implements Comparable {
 	
 	private String label;
 	private int x;
@@ -205,6 +205,10 @@ public class Celda extends JButton {
         if (celda.getF() > this.getF())
             return -1;
         return 1;
+    }
+    @Override
+    public String toString() {
+        return "[" + this.x + "] [" + this.y + "] F=" + f + " G="+g+" H="+h;
     }
 
 }

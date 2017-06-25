@@ -1,13 +1,14 @@
 package juanjo.ico;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Busquedas {
 	private Celda[][] laberinto;
 
-    private ArrayList<Celda> abiertos;
+    private ArrayList<Celda> abiertos = new ArrayList<>();
 
-    private ArrayList<Celda> cerrados;
+    private ArrayList<Celda> cerrados = new ArrayList<>();
     private int tamano;
 
 	public int getTamano() {
@@ -28,7 +29,10 @@ public class Busquedas {
 	public Celda[][] getCeldas() {
         return laberinto;
     }
-	public void setCeldas( Celda[][] laberinto) {
+	public void setCeldas( Celda[][] laberinto, int tamano) {
+		this.laberinto = new Celda[tamano][tamano];
+		
+		this.tamano = tamano;
 		this.laberinto = laberinto;
     }
 	public void buscar() {
@@ -37,23 +41,25 @@ public class Busquedas {
     	 */
     	
         abiertos.add(laberinto[1][1]);
-        
         while (!abiertos.isEmpty()) {
 
             Celda celdaActual = abiertos.remove(0);
+
             cerrados.add(celdaActual);
             // Marcamos la celdaActual como celda visitada.
             celdaActual.setVisitado(true);
             // En caso de que sea la celda final entramos.
-            if (celdaActual==laberinto[tamano][tamano]) {
+            if (celdaActual.getPosX() ==laberinto[tamano][tamano].getPosX() &&
+            		celdaActual.getPosY() ==laberinto[tamano][tamano].getPosY()) {
             	// En caso de que sea dijkstra o astar calculamos el coste.
             	celdaActual.setG(celdaActual.getPadre().getG() + 1);	
             	celdaActual.setF(celdaActual.getG(),celdaActual.getH()); 
                 guardar(celdaActual);
+                System.out.println(cerrados);
                 return;
             } else {
-
-    	//   		explorarCelda(celdaActual);                
+            	 
+    	  		explorarCelda(celdaActual);                
       
             }
         }
@@ -74,82 +80,110 @@ public class Busquedas {
         }
 	}
 	
+	private void explorarCelda(Celda celdaActual) {
+
+		
+        ArrayList<Celda> sucesores = sucesores(celdaActual);
+        
+        for (Celda sucesor : sucesores) {
+
+            if (cerrados.indexOf(sucesor) == -1 && abiertos.indexOf(sucesor) == -1) {
+
+                abiertos.add(sucesor);
+                
+                laberinto[sucesor.getPosX()][sucesor.getPosY()] = sucesor;
+                
+                // Ordenamos el array de abierto en función de F(n).
+                Collections.sort(abiertos);
+                
+            }
+        }
+    }
+	
 	 private ArrayList<Celda> sucesores(Celda celdaActual) {
 		 ArrayList<Celda> sucesores = new ArrayList<>();
 		 
 		 Celda sucesor;
-	        // IZQUIERDA(ARRIBA)
-	        if (celdaActual.getPosX() > 0) {
+	  
+	        if (celdaActual.getPosX() > 1) {
 	            if (laberinto[celdaActual.getPosX() - 1][celdaActual.getPosY()].getText() != "Montaña") {
 	            	sucesor = hijo(celdaActual, -1, 0);
 	                sucesores.add(sucesor);
 	            }
 	        }
-	        //DIAGONAL IZQUIERDA ARRIBA(D.D.AR)
-	        if (celdaActual.getPosY() < tamano - 1 && celdaActual.getPosX()>0) {
+
+	        if (celdaActual.getPosY() < tamano && celdaActual.getPosX()>1) {
 	            if (laberinto[celdaActual.getPosX() - 1][celdaActual.getPosY()+1].getText() != "Montaña") {
 	            	sucesor = hijo(celdaActual, -1, 1);
 	            	sucesores.add(sucesor);
 	            }
 	        }
-	        // ARRIBA(DERECHA)
-	        if (celdaActual.getPosY() < tamano - 1) {
+	        if (celdaActual.getPosY() < tamano) {
 	            if (laberinto[celdaActual.getPosX()][celdaActual.getPosY() + 1].getText() != "Montaña") {
 	            	sucesor = hijo(celdaActual, 0, 1);
 	                sucesores.add(sucesor);
 	            }
 	        }
-	        //DIAGONAL DERECHA ARRIBA(D.D.AB)
-	        if (celdaActual.getPosY() < tamano - 1 && celdaActual.getPosX()< tamano-1) {
-	            if (laberinto[celdaActual.getPosX() + 1][celdaActual.getPosY()+1].getText() != "Montaña") {
+	        if (celdaActual.getPosY() < tamano && celdaActual.getPosX()< tamano) {
+	            if (laberinto[celdaActual.getPosX() + 1][celdaActual.getPosY()+1].getText() != "Montaña"
+	            		&& abiertos.indexOf(laberinto[celdaActual.getPosX() + 1][celdaActual.getPosY()+1])!=-1)
+	            {
+	            	
 	            	sucesor = hijo(celdaActual, 1, 1);
+
 	            	sucesores.add(sucesor);
 	            }
 	        }
-	        // DERECHA(ABAJO)
-	        if (celdaActual.getPosX() < tamano - 1) {
+	        
+	        if (celdaActual.getPosX() < tamano ) {
+	        	
 	            if (laberinto[celdaActual.getPosX() + 1][celdaActual.getPosY()].getText() != "Montaña") {
+	            	
 	            	sucesor = hijo(celdaActual, 1, 0);
 	            	sucesores.add(sucesor);
 	            }
 	        }
-	        //DIAGONAL DERECHA ABAJO(D.I.AB)
-	        if (celdaActual.getPosY() >0 && celdaActual.getPosX()< tamano-1) {
+	        
+	        if (celdaActual.getPosY() >1 && celdaActual.getPosX()< tamano-1) {
 	            if (laberinto[celdaActual.getPosX() + 1][celdaActual.getPosY()-1].getText() != "Montaña") {
 	            	sucesor = hijo(celdaActual, 1, -1);
 	            	sucesores.add(sucesor);
 	            }
 	        }
-	        // ABAJO(IZQUIERDA)
-	        if (celdaActual.getPosY() > 0) {
+	        
+	        if (celdaActual.getPosY() > 1) {
 	            if (laberinto[celdaActual.getPosX()][celdaActual.getPosY() - 1].getText() != "Montaña") {
 	            	sucesor = hijo(celdaActual, 0, -1);
 	                sucesores.add(sucesor);
 	            }
 	        }
-	        //DIAGONAL IZQUIERDA ABAJO(D.I.AR)
-	        if (celdaActual.getPosY() >0 && celdaActual.getPosX()>0) {
+	        
+	        if (celdaActual.getPosY() >1 && celdaActual.getPosX()>1) {
 	            if (laberinto[celdaActual.getPosX() - 1][celdaActual.getPosY()-1].getText() != "Montaña") {
 	            	sucesor = hijo(celdaActual, -1, -1);
 	            	sucesores.add(sucesor);
 	            }
 	        }
-		 
+	    	
+		 System.out.println(sucesores);
 		 return sucesores;
 	 
 	 }
 	 private Celda hijo(Celda celdaActual, int x, int y){
 	    	Celda sucesor = null;
-	    	sucesor = new Celda(
-	    					laberinto[celdaActual.getPosX() + x][celdaActual.getPosY() + y].getText(),
-	    					celdaActual.getPosX() + x,
-			                celdaActual.getPosY() + y,
-			                laberinto[celdaActual.getPosX() + x][celdaActual.getPosY() + y].getH(),
-			                (int) (1/laberinto[celdaActual.getPosX() + x][celdaActual.getPosY() + y].getV() + celdaActual.getG())
-			                );
-
-	    	
+	    
+	    			sucesor = new Celda(
+    					laberinto[celdaActual.getPosX() + x][celdaActual.getPosY() + y].getText(),
+    					celdaActual.getPosX() + x,
+		                celdaActual.getPosY() + y,
+		                (float)(1/laberinto[celdaActual.getPosX() + x][celdaActual.getPosY() + y].getV() + celdaActual.getG()),
+		                laberinto[celdaActual.getPosX() + x][celdaActual.getPosY() + y].getH()
+		                );	
+	    			System.out.println(laberinto[celdaActual.getPosX() + x][celdaActual.getPosY() + y].getPosX()+" "+
+	    	    			laberinto[celdaActual.getPosX() + x][celdaActual.getPosY() + y].getPosY()+" "+laberinto[celdaActual.getPosX() + x][celdaActual.getPosY() + y].getV());
+	    	    
 	    	sucesor.setPadre(celdaActual);
+	    	
 	    	return sucesor;
 	    }
 	

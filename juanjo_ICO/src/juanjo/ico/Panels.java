@@ -50,14 +50,7 @@ public class Panels extends JFrame{
 		gl.setVgap(5);
 		
 		JButton bloq = new JButton("Iniciar Búsquedas");
-		bloq.addActionListener(new ActionListener()
-		{
-		  public void actionPerformed(ActionEvent e)
-		  {
-		    // display/center the jdialog when the button is pressed
-			 busq.setCeldas(laberinto);
-		  }
-		});
+		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		JMenu menu = new JMenu("A Menu");
@@ -80,6 +73,7 @@ public class Panels extends JFrame{
 				b.setH(b.calcularHeuristica(tamano));
 				b.setF(b.getG(), b.getH());
 				b.sucesores(b.getPosX(), b.getPosY(), tamano);
+				b.setV();
 				
 				if(i==1 && j==1)
 				{
@@ -153,10 +147,25 @@ public class Panels extends JFrame{
 		            	//repaint();
 		            }
 		        });
-				cp.add(b,BorderLayout.CENTER);
+				cp.add(b);
 			}
 		}		cp.setLayout(gl);
-
+		
+		bloq.addActionListener(new ActionListener()
+		{
+		  public void actionPerformed(ActionEvent e)
+		  {
+		    // display/center the jdialog when the button is pressed
+			 busq.setCeldas(laberinto, tamano);
+				/*for (int i = 1; i <= tamano; i++) {
+					for (int j = 1; j <= tamano; j++) {
+						System.out.println(laberinto[i][j].getText());
+					}
+				}*/
+			 
+			 busq.buscar();
+		  }
+		});
 		
 	}
 	/*public void botonBuscar(){
