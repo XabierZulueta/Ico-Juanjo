@@ -31,6 +31,48 @@ public class Busquedas {
 	public void setCeldas( Celda[][] laberinto) {
 		this.laberinto = laberinto;
     }
+	public void buscar() {
+    	/**
+    	 * Añadimos la celda inicial a abiertos.
+    	 */
+    	
+        abiertos.add(laberinto[1][1]);
+        
+        while (!abiertos.isEmpty()) {
+
+            Celda celdaActual = abiertos.remove(0);
+            cerrados.add(celdaActual);
+            // Marcamos la celdaActual como celda visitada.
+            celdaActual.setVisitado(true);
+            // En caso de que sea la celda final entramos.
+            if (celdaActual==laberinto[tamano][tamano]) {
+            	// En caso de que sea dijkstra o astar calculamos el coste.
+            	celdaActual.setG(celdaActual.getPadre().getG() + 1);	
+            	celdaActual.setF(celdaActual.getG(),celdaActual.getH()); 
+                guardar(celdaActual);
+                return;
+            } else {
+
+    	//   		explorarCelda(celdaActual);                
+      
+            }
+        }
+        /**
+         * Si llega hasta aquí es que ha buscado todos los posibles estados y no ha encontrado la solución
+         */
+
+    }
+	
+	private void guardar(Celda celdaActual)
+	{
+		if (celdaActual.getPadre() != null) {
+            guardar(celdaActual.getPadre());
+        }
+        
+        if (!celdaActual.getText().equals("Inicio") && !celdaActual.getText().equals("Final")){
+        	celdaActual.setVisitado(true);
+        }
+	}
 	
 	 private ArrayList<Celda> sucesores(Celda celdaActual) {
 		 ArrayList<Celda> sucesores = new ArrayList<>();

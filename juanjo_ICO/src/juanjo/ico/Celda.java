@@ -19,8 +19,17 @@ public class Celda extends JButton {
 	private float h;
 	private float v;
     private Celda padre;
+    private boolean visitado;
 
-    public void sucesores(int x, int y, int tamano){
+    public boolean isVisitado() {
+		return visitado;
+	}
+
+	public void setVisitado(boolean visitado) {
+		this.visitado = visitado;
+	}
+
+	public void sucesores(int x, int y, int tamano){
     	Celda[][] suc = new Celda[tamano][tamano];
     	if(x==1 && y==1)
     	{
