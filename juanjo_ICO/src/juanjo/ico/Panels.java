@@ -184,6 +184,11 @@ public class Panels extends JFrame{
 			for (int j = 1; j <= tamano; j++) {
 				
 				Celda b = laberinto[i][j];
+				if(b.isVisitado())
+				{
+					System.out.println("HOLA");
+					b.setBackground(java.awt.Color.cyan);
+				}
 				frame.add(b);
 			}
 		}		frame.setLayout(gl);

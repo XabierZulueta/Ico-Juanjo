@@ -13,6 +13,15 @@ public class Celda extends JButton implements Comparable {
 	
 	private String label;
 	private int x;
+	private int sol;
+	public int getSol() {
+		return sol;
+	}
+
+	public void setSol(int sol) {
+		this.sol = sol;
+	}
+
 	private int y;
 	private float f;
 	private float g;
@@ -64,6 +73,10 @@ public class Celda extends JButton implements Comparable {
     
     public double getV() {
 		return v;
+	}
+    
+    public boolean getVisitado() {
+		return visitado;
 	}
     
 	public void setV() {
